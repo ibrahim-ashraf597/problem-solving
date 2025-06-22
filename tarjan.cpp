@@ -1,3 +1,5 @@
+
+
 ﻿vector< vector<int> > adj, components;
 vector<int> inStack, lowLink, compNum, inDeg;
 stack<int> stk;
