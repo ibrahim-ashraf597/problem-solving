@@ -1,42 +1,38 @@
-﻿const int bs1 = 131, bs2 = 137, M1 = 1e9 + 7, M2 = 1e9 + 11;
-int pw1[N], pw2[N];
-int mul(int x, int y, int MOD) {
-    return(((x % MOD) * (y % MOD)) % MOD);
-}
-void  init() {
+const int N = 1e6 + 5, n22 = 501, mod = 1e9 + 7, M = 1e9 + 7, base = 31;
+
+ll pw1[N], pw2[N];
+const ll bs1 = 131, bs2 = 137, mod2 = 1e9 + 11;
+void init() {
     pw1[0] = pw2[0] = 1;
-    for (int i = 1; i < N; i++)
-    {
-        pw1[i] = mul(pw1[i - 1], bs1, M1);
-        pw2[i] = mul(pw2[i - 1], bs2, M2);
+    for (int i = 1; i < N; i++) {
+        pw1[i] = pw1[i - 1] * bs1 % mod;
+        pw2[i] = pw2[i - 1] * bs2 % mod2;
     }
-
 }
-
-int add(int x, int y, int MOD) {
-    return(((x % MOD) + (y % MOD)) % MOD);
-}
-class hashing {
+struct Hash
+{
 private:
-    vector<pair<int, int>>pr;
-public:
-    hashing(const string& a) {
-        int h1 = 0, h2 = 0;
-        for (int i = 0; i < a.size(); i++) {
-            int x = a[i];
-            h1 = add(mul(h1, bs1, M1), x, M1);
-            h2 = add(mul(h2, bs2, M2), x, M2);
-            pr.push_back({ h1,h2 });
-        }
+    vector<pair<int, int>> pre;
 
+public:
+    Hash(string& s) {
+        pre.assign(s.size(), { 0, 0 });
+        int h1 = 0, h2 = 0;
+        for (int i = 0; i < s.size(); i++) {
+            int x = s[i] + 1;
+            h1 = (h1 * bs1 % mod + x) % mod;
+            h2 = (h2 * bs2 % mod2 + x) % mod2;
+            pre[i] = { h1, h2 };
+        }
     }
-    pair<int, int>get(int l, int r) {
-        auto ret = pr[r];
+    pair<int, int> get(int l, int r) {
+        pair<int, int> ret = pre[r];
         int sz = r - l + 1;
         if (l) {
-            ret.first = (ret.first - mul(pr[l - 1].first, pw1[sz], M1) + M1) % M1;
-            ret.second = (ret.second - mul(pr[l - 1].second, pw2[sz], M2) + M2) % M2;
+            ret.first = (ret.first - pre[--l].first * pw1[sz] % mod + mod) % mod;
+            ret.second = (ret.second - pre[l].second * pw2[sz] % mod2 + mod2) % mod2;
         }
         return ret;
+
     }
 };
