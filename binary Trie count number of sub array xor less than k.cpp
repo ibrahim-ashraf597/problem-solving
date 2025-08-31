@@ -1,4 +1,4 @@
-﻿// وَإِن تَعْجَبْ فَعَجَبٌ قَوْلُهُمْ أَإِذَا كُنَّا تُرَابًا أَإِنَّا لَفِي خَلْقٍ جَدِيدٍ
+// وَإِن تَعْجَبْ فَعَجَبٌ قَوْلُهُمْ أَإِذَا كُنَّا تُرَابًا أَإِنَّا لَفِي خَلْقٍ جَدِيدٍ
 #include "bits/stdc++.h"
 #define ll long long 
 #define el '\n'
@@ -19,13 +19,12 @@ struct BinaryTrie {
     node* root = new node();
     void insert(int n) {
         node* cur = root;
+        cur->cnt++;                   
         for (int i = 31; i >= 0; i--) {
             bool indx = (n >> i) & 1ll;
-            if (cur->ch[indx] == 0) {
-                cur->ch[indx] = new node();
-            }
-            cur->cnt++;
+            if (cur->ch[indx] == 0) cur->ch[indx] = new node();
             cur = cur->ch[indx];
+            cur->cnt++;           
         }
     }
 
@@ -76,7 +75,7 @@ void solve() {
     int c = 0;
     for (int i = 0; i<n && cin >> a[i]; pr[i] = a[i], i ? pr[i] ^= pr[i - 1] : 0, i++);
     for (int i = 0; i < n; i++) {
-
+      //  cout << tr.query(pr[i]) << el;
         c += tr.query(pr[i]);
         tr.insert(pr[i]);
     }
@@ -88,6 +87,6 @@ signed main() {
     cin.tie(0), cout.tie(0);
 
     int T = 1;
-    cin >> T;
+   cin >> T;
     while (T--) solve();
 }
