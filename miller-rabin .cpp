@@ -15,10 +15,9 @@ long long mod_exp(long long a, long long b, long long m) {
     }
     return res;
 }
-
 bool miller_rabin(long long n, int k) {
-    if (n <= 1) return false;
-    if (n == 2) return true;
+    if (n < 2) return false;
+    if (n == 2 || n == 3) return true;
     if (n % 2 == 0) return false;
 
     long long m = n - 1;
@@ -29,23 +28,22 @@ bool miller_rabin(long long n, int k) {
     }
 
     for (int i = 0; i < k; i++) {
-        long long a = 2 + rand() % (n - 3);
+        long long a = 2 + rand() % (n - 4);
         long long x = mod_exp(a, m, n);
 
         if (x == 1 || x == n - 1) continue;
 
-        bool found = false;
+        bool ok = false;
         for (int r = 0; r < d - 1; r++) {
             x = (x * x) % n;
             if (x == n - 1) {
-                found = true;
+                ok = true;
                 break;
             }
         }
 
-        if (!found) return false;
+        if (!ok) return false;
     }
-
     return true;
 }
 
@@ -64,3 +62,4 @@ int main() {
 
     return 0;
 }
+
