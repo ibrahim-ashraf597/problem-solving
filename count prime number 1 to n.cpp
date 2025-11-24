@@ -1,6 +1,6 @@
 int count_primes(int n) {
     const int S = 10000;
-
+    // time is sqrt(n)
     vector<int> primes;
     int nsqrt = sqrt(n);
     vector<char> is_prime(nsqrt + 2, true);
