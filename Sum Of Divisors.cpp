@@ -1,4 +1,4 @@
-
+///  1+k+k2+k3+⋯+kn    =  ans=(k^(n+1) -1 )/(k-1)
 long long SumOfDivisors(long long num) {
     long long total = 1;
 
