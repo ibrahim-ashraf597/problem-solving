@@ -23,3 +23,20 @@ long long SumOfDivisors(long long num) {
     }
     return total;
 }
+
+
+long long SumOfDivisors(vector<pair<int,int> > a) {
+    int ans = 1;
+    // ans=(k^(n+1) -1 )/(k-1)
+    for (auto [k,n]: a) {
+        int s;
+        if (n == 1) {
+            s = k + 1;
+        } else {
+            s = (power(k, n + 1, M) - 1 + M) * power(k - 1, M - 2, M);
+        }
+        ans = mul(ans, s);
+    }
+
+    return ans;
+}
