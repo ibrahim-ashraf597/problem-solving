@@ -6,13 +6,12 @@ using namespace std;
 // Do not fight someone who still carries a living dream inside
 // متي اصبح الكابوس لديك حلم تتمتع به ؟
 static const long long INF = 4e18;
+
 class FloydWarshall {
 public:
-
-
     int n;
-    vector<vector<long long>> d;
-    vector<vector<int>> p;
+    vector<vector<long long> > d;
+    vector<vector<int> > p;
 
     FloydWarshall(int n) : n(n) {
         d.assign(n, vector<long long>(n, INF));
@@ -67,7 +66,7 @@ public:
     }
 
 private:
-    void build(int u, int v, vector<int>& path) {
+    void build(int u, int v, vector<int> &path) {
         if (p[u][v] == -1) {
             path.push_back(u);
             if (u != v) path.push_back(v);
@@ -81,30 +80,32 @@ private:
 };
 
 void solve() {
-    int n, m; int q;
+    int n, m;
+    int q;
 
-    cin >> n >> m;cin >> q;
- FloydWarshall f(n);f.run();
-for (int i = 0; i < m; i++) {
-int x,y,c;
-    cin >> x >> y >> c;
-    x--;
-    y--;
-  f.addEdge(x, y, c);
-  f.addEdge(y,x, c);
-
-
-}
+    cin >> n >> m;
+    cin >> q;
+    FloydWarshall f(n);
+    f.run();
+    for (int i = 0; i < m; i++) {
+        int x, y, c;
+        cin >> x >> y >> c;
+        x--;
+        y--;
+        f.addEdge(x, y, c);
+        f.addEdge(y, x, c);
+    }
     f.run();
 
     while (q--) {
         int x, y;
-        cin >> x >> y;x--;
+        cin >> x >> y;
+        x--;
         y--;
-        if (f.getDistance(x,y)==INF)
+        if (f.getDistance(x, y) == INF)
             cout << -1;
         else
-            cout << f.getDistance(x,y);
+            cout << f.getDistance(x, y);
         cout << el;
     }
 }
