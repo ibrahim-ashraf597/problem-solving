@@ -10,11 +10,11 @@ struct Maximumflow_Ford_Fulkerson_and_Edmonds_Karp {
         capacity.assign(n + 1, vector<int>(node + 1));
     }
 
-
     void addEdge(int x,int y,int c) {
         ad[x].push_back(y);
         ad[y].push_back(x);
         capacity[x][y] += c;
+       //  capacity[y][x] += c; if the graph is undirected
     }
 
     int bfs(int s,int t, vector<int> &par) {
@@ -51,5 +51,26 @@ struct Maximumflow_Ford_Fulkerson_and_Edmonds_Karp {
             }
         }
         return flow;
+    }
+
+    vector<array<int, 2> > path_Of_Flow(int s,int t, vector<array<int, 2> > edges) {
+        queue<int> q;
+        q.push(s);
+        vector<int> vis(n + 1, false);
+        vis[s] = true;
+        while (!q.empty()) {
+            int cur = q.front();
+            q.pop();
+            for (int x: ad[cur]) {
+                if (!vis[x] && capacity[cur][x] > 0)
+                    q.push(x), vis[x] = true;
+            }
+        }
+        vector<array<int, 2> > ret;
+        for (auto [x,y]: edges)
+            if (vis[x] != vis[y]) {
+                ret.push_back({x, y});
+            }
+        return ret;
     }
 };
