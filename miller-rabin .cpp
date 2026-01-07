@@ -1,65 +1,26 @@
-﻿#include <iostream>
-#include <cstdlib>
-#include <cmath>
-using namespace std;
+typedef unsigned long long ull;
 
-long long mod_exp(long long a, long long b, long long m) {
-    long long res = 1;
-    a = a % m;
-    while (b > 0) {
-        if (b % 2 == 1) {
-            res = (res * a) % m;
-        }
-        a = (a * a) % m;
-        b /= 2;
-    }
-    return res;
-}
-bool miller_rabin(long long n, int k) {
-    if (n < 2) return false;
-    if (n == 2 || n == 3) return true;
-    if (n % 2 == 0) return false;
-
-    long long m = n - 1;
-    int d = 0;
-    while (m % 2 == 0) {
-        m /= 2;
-        d++;
-    }
-
-    for (int i = 0; i < k; i++) {
-        long long a = 2 + rand() % (n - 4);
-        long long x = mod_exp(a, m, n);
-
-        if (x == 1 || x == n - 1) continue;
-
-        bool ok = false;
-        for (int r = 0; r < d - 1; r++) {
-            x = (x * x) % n;
-            if (x == n - 1) {
-                ok = true;
-                break;
-            }
-        }
-
-        if (!ok) return false;
-    }
-    return true;
+ull modmul(ull a, ull b, ull M) {
+    ll ret = a * b - M * ull(1.L / M * a * b);
+    return ret + M * (ret < 0) - M * (ret >= (ll)M);
 }
 
-int main() {
-    long long n;
-    int k;
-    cin >> n >> k;
-    /// k عدد الاخبتارات اللي هعملها 
-    // طبعا كل لما ال k تزيد يبقي افضل
-    if (miller_rabin(n, k)) {
-        cout << n << " is prime";
-    }
-    else {
-        cout << n << " is not prime";
-    }
-
-    return 0;
+ull modpow(ull b, ull e, ull mod) {
+    ull ans = 1;
+    for (; e; b = modmul(b, b, mod), e /= 2)
+        if (e & 1) ans = modmul(ans, b, mod);
+    return ans;
 }
 
+bool isPrime(ull n) {
+    if (n < 2 || n % 6 % 4 != 1) return (n | 1) == 3;
+    ull A [] = {2, 325, 9375, 28178, 450775, 9780504, 1795265022},
+        s = __builtin_ctzll(n - 1), d = n >> s;
+    for (ull a : A) {
+        ull p = modpow(a % n, d, n), i = s;
+        while (p != 1 && p != n - 1 && a % n && i--)
+            p = modmul(p, p, n);
+        if (p != n - 1 && i != s) return 0;
+    }
+    return 1;
+}
