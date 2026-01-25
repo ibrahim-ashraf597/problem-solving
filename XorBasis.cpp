@@ -1,3 +1,4 @@
+const int Log=64;
 struct XorBasis {
     int size;
     array<int, Log> basis,close;
