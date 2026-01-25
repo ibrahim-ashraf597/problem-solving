@@ -1,4 +1,3 @@
-const int Log=64;
 struct XorBasis {
     int size;
     array<int, Log> basis,close;
@@ -8,7 +7,7 @@ struct XorBasis {
             basis[i] = 0, close[i] = -1;
     }
     bool have(int x,int i) {
-        return ((x >>i)&1);
+        return ((x >>i)&1LL);
     }
     void  add(int x) {
         for (int i=Log-1; i>=0; i--) {
