@@ -17,7 +17,7 @@ struct XorBasis {
            if (basis[i]==0) {
                basis[i] = x;
 
-               close[i] = x;
+            //   close[i] = x;
                size++;
                return;
            }
