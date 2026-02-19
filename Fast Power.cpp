@@ -11,3 +11,13 @@ ll power(ll n, ll p, ll mod) {
     else
         return a;
 }
+
+ll power(ll b, ll p) {
+    ll ret = 1;
+    while (p) {
+        if (p & 1)
+            ret = (ret * b) % mod;
+        b *= b, b %= mod, p >>= 1;
+    }
+    return ret;
+}
