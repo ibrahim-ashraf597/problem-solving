@@ -21,7 +21,7 @@ struct Sqrt {
 	long long query(int r) {
 		long long res = 0;
 		for (int i = 0; i < r / block_size; i++) { res += blocks[i]; }
-		for (int i = (r / block_size) * block_size; i < r; i++) { res += nums[i]; }
+		for (int i = (r / block_size) * block_size; i <= r; i++) { res += nums[i]; }
 		return res;
 	}
 
