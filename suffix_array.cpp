@@ -15,6 +15,8 @@ void sort(vector<int> &p, vector<int> &c) {
 }
 
 auto suffix_array(string s) {
+    // p[i] = index of i-th smallest suffix
+   // c[i] = rank of suffix starting at i
     s += "$";
     int n = s.size();
     vector<int> p(n), c(n);
