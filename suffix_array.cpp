@@ -75,3 +75,32 @@ vector<int> LCP(string s) {
     }
     return lcp;
 }
+
+
+
+
+
+/*
+aybabtu
+
+
+//
+""
+abtu
+aybabtu
+babtu
+btu
+tu
+u
+ybabtu
+
+query
+
+7 3 0 2 4 5 6 1
+2 7 3 1 4 5 6 0
+0 0 1 0 1 0 0 0
+
+bab
+abc
+a
+ */
