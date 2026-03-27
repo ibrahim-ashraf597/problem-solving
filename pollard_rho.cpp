@@ -66,3 +66,8 @@ void factorize(ll n, vector<ll>& factors) {
     factorize(d, factors);
     factorize(n / d, factors);
 }
+
+void solve() {
+    vector<int>v;
+    factorize(a*b,v);
+}  
