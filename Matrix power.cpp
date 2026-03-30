@@ -11,6 +11,10 @@ using namespace std;
 // احذر يا تيموس
 
 
+
+
+//   F(k+n)=F(k)*F(n−1)+F(k+1)*F(n)    f->Fibonacci 
+
 const long long MOD = 1e9 + 7;
 
 Matrix mul(const Matrix &a, const Matrix &b) {
