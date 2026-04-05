@@ -19,7 +19,7 @@ public:
         pre.assign(s.size(), { 0, 0 });
         int h1 = 0, h2 = 0;
         for (int i = 0; i < s.size(); i++) {
-            int x = s[i] + 1;
+            int x = s[i] ;
             h1 = (h1 * bs1 % mod + x) % mod;
             h2 = (h2 * bs2 % mod2 + x) % mod2;
             pre[i] = { h1, h2 };
