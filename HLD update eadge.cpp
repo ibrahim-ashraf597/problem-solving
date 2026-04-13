@@ -1,7 +1,7 @@
 map<pair<int, int>, int>mp;
 struct HLD {
     int sz[N], big[N], par[N], head[N], id[N], dep[N], val[N];
-
+    ///   لو جاب رن تايم فهو ميموري مش رن تايم 
     void dfs(int v, const vector<vector<pair<int,int>>>& ad) {
         sz[v] = 1;
         for (auto x : ad[v]) {
