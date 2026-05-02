@@ -1,46 +1,32 @@
-﻿
-vector<int> deg(N);
-class Bridges
-{
-    /*
-       bridge is an edge if i remove it the graph will be unconnected
-    */
+
+const int N = 2e5 + 5;
+vector<int> ad[N];
+int deg[N], low[N], par[N], timer;
+
+class Bridges {
     vector<bool> vis;
-    vector<int> low;
-    void dfs(int u, int p)
-    {
+    void dfs(int u, int p) {
         vis[u] = 1;
-        for (auto v : ad[u])
-        {
-            if (v == p)
-                continue;
-            if (vis[v])
-            {
-                low[u] = min(low[u], deg[v]);
-                continue;
-            }
-            deg[v] = deg[u] + 1;
-            dfs(v, u);
-            low[u] = min(low[u], low[v]);
-            if (low[v] > deg[u])
-            {
-                br++;
-                // edge between u and v is bridge --------
+        deg[u] = low[u] = ++timer;
+        for (auto &to : ad[u]) {
+            if (to == p) continue;
+            if (vis[to]) {
+                low[u] = min(low[u], deg[to]);
+            } else {
+                dfs(to, u);
+                low[u] = min(low[u], low[to]);
+                if (low[to] > deg[u]) {
+                    // edge between u and v is bridge --------
+                }
             }
         }
     }
-
 public:
-    Bridges(int n)
-    {
-        vis = vector<bool>(n + 1);
-        low = vector<int>(n + 1, 1e9);
-        for (int i = 1; i <= n; i++)
-        {
-            if (!vis[i])
-            {
-                dfs(i, -1);
-            }
+    Bridges(int n) {
+        vis.assign(n + 1, false);
+        timer = 0;
+        for (int i = 1; i <= n; i++) {
+            if (!vis[i]) dfs(i, -1);
         }
     }
 };
