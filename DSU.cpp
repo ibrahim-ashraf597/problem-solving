@@ -1,8 +1,7 @@
 struct DSU {
 private:
-    vector<int> par, size;
-
 public:
+    vector<int> par, size;
     DSU(int n) {
         par.resize(n + 5);
         size.resize(n + 5, 1);
