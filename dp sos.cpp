@@ -9,6 +9,16 @@
 using namespace std;
 // وكل يوم يسال نفسه نفس السؤال هيا ليه صعبه كده؟
 // وما يلاقي اجابه غير اني ربنا مش بيضيع تعب حد
+
+/*
+
+
+the number of elements y such that x|y=x
+the number of elements y such that x&y=x
+the number of elements y such thatx&y=0
+
+*/
+
 const int N = 1e5 + 6,B=20,val=1<<20;
 int freq[val];int dp_or[val],dp_and[val];
 bool on(int mask,int i) {
