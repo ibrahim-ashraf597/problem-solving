@@ -1,5 +1,3 @@
-
-
 ll power(ll n, ll p, ll mod) {
     if (p == 0)
         return 1;
