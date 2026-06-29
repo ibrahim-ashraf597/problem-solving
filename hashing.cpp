@@ -8,7 +8,7 @@ using namespace std;
 const int N = 2e5 + 5, n22 = 501, mod = 1e9 + 7, M = 1e9 + 7, base = 31;
 
 ll pw1[N], pw2[N];
-const ll bs1 = 131, bs2 = 137, mod2 = 1e9 + 11;
+const ll bs1 = 131, bs2 = 137, mod2 = 1e9 + 9;
 
 void init() {
     pw1[0] = pw2[0] = 1;
