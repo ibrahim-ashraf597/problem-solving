@@ -1,0 +1,103 @@
+class LazySegmentTree {
+public:
+    struct Node {
+        ll sum, mn, mx;
+        int len;
+    };
+
+    int n;
+    vector<Node> tree;
+    vector<ll> lazy;
+
+    LazySegmentTree(vector<ll> &a) {
+        n = a.size();
+        tree.resize(4 * n);
+        lazy.assign(4 * n, 0);
+        build(1, 0, n - 1, a);
+    }
+
+    Node mergeNode(const Node &a, const Node &b) {
+        Node c;
+        c.sum = a.sum + b.sum;
+        c.mn = min(a.mn, b.mn);
+        c.mx = max(a.mx, b.mx);
+        c.len = a.len + b.len;
+        return c;
+    }
+
+    void build(int id, int l, int r, vector<ll> &a) {
+        if (l == r) {
+            tree[id] = {a[l], a[l], a[l], 1};
+            return;
+        }
+        int mid = (l + r) / 2;
+        build(id * 2, l, mid, a);
+        build(id * 2 + 1, mid + 1, r, a);
+        tree[id] = mergeNode(tree[id * 2], tree[id * 2 + 1]);
+    }
+
+    void apply(int id, ll val) {
+        tree[id].sum += val * tree[id].len;
+        tree[id].mn += val;
+        tree[id].mx += val;
+        lazy[id] += val;
+    }
+
+    void push(int id) {
+        if (lazy[id] != 0) {
+            apply(id * 2, lazy[id]);
+            apply(id * 2 + 1, lazy[id]);
+            lazy[id] = 0;
+        }
+    }
+
+    void updateRange(int id, int l, int r, int ql, int qr, ll val) {
+        if (qr < l || r < ql)
+            return;
+
+        if (ql <= l && r <= qr) {
+            apply(id, val);
+            return;
+        }
+
+        push(id);
+        int mid = (l + r) / 2;
+        updateRange(id * 2, l, mid, ql, qr, val);
+        updateRange(id * 2 + 1, mid + 1, r, ql, qr, val);
+        tree[id] = mergeNode(tree[id * 2], tree[id * 2 + 1]);
+    }
+
+    Node queryRange(int id, int l, int r, int ql, int qr) {
+        if (qr < l || r < ql)
+            return {0, (ll) 4e18, (ll) -4e18, 0};
+
+        if (ql <= l && r <= qr)
+            return tree[id];
+
+        push(id);
+        int mid = (l + r) / 2;
+        Node L = queryRange(id * 2, l, mid, ql, qr);
+        Node R = queryRange(id * 2 + 1, mid + 1, r, ql, qr);
+
+        if (L.len == 0) return R;
+        if (R.len == 0) return L;
+
+        return mergeNode(L, R);
+    }
+
+    ll getSum(int l, int r) {
+        return queryRange(1, 0, n - 1, l, r).sum;
+    }
+
+    ll getMin(int l, int r) {
+        return queryRange(1, 0, n - 1, l, r).mn;
+    }
+
+    ll getMax(int l, int r) {
+        return queryRange(1, 0, n - 1, l, r).mx;
+    }
+
+    void add(int l, int r, ll val) {
+        updateRange(1, 0, n - 1, l, r, val);
+    }
+};
