@@ -1,0 +1,191 @@
+// Undircted Graoh
+// Euler-Path : Exactly 2 vertices have odd degree / Eulerian path exists (must start/end at the odd vertices)
+// Euler-Circut : All vertices have even degree
+
+// Directed Graph
+// Euler-Path :  One vertex has out − in = 1, one has out − in = −1, all others balanced
+// EUler-Circut : indegree(v) == outdegree(v) for all v
+
+// Euler(path - circut) visit all edges not nodes
+// in O(V +E ) time which is less than vising all nodes in (2^n) 
+
+#include <bits/stdc++.h>
+#define endl "\n"
+#define int long long 
+using namespace std;
+typedef long long ll;
+
+
+struct EulerUndirected {
+    int n;
+    int edges_count;
+    vector<vector<pair<int, int>>> adj; // {neighbor, edge_id}
+    vector<int> deg;
+    vector<bool> used_edge;
+
+    void init(int _n) {
+        n = _n;
+        edges_count = 0;
+        adj.assign(n, vector<pair<int, int>>());
+        deg.assign(n, 0);
+        used_edge.clear();
+    }
+
+    void addEdge(int u, int v) {
+        adj[u].push_back({v, edges_count});
+        adj[v].push_back({u, edges_count});
+        deg[u]++;
+        deg[v]++;
+        used_edge.push_back(false);
+        edges_count++;
+    }
+
+    // Returns the sequence of vertices in the path/circuit.
+    // Returns an empty vector if no Eulerian Path/Circuit exists.
+    vector<int> solve() {
+        if (edges_count == 0) return {};
+
+        int start_node = -1;
+        int odd_count = 0;
+
+        // 1. Check conditions and find the start node
+        for (int i = 0; i < n; i++) {
+            if (deg[i] % 2 != 0) {
+                odd_count++;
+                start_node = i;
+            }
+        }
+
+        if (odd_count != 0 && odd_count != 2) return {};
+
+        // If it's a circuit (all even degrees), start at any node with edges
+        if (start_node == -1) {
+            for (int i = 0; i < n; i++) {
+                if (deg[i] > 0) {
+                    start_node = i;
+                    break;
+                }
+            }
+        }
+
+        // 2. Hierholzer's Algorithm
+        vector<int> path;
+        vector<int> stack;
+        stack.push_back(start_node);
+
+        // Keep track of which edges we have processed for each node to avoid O(E^2)
+        vector<int> ptr(n, 0); 
+
+        while (!stack.empty()) {
+            int u = stack.back();
+            bool found_edge = false;
+
+            while (ptr[u] < adj[u].size()) {
+                auto [v, id] = adj[u][ptr[u]++];
+                if (!used_edge[id]) {
+                    used_edge[id] = true;
+                    stack.push_back(v);
+                    found_edge = true;
+                    break;
+                }
+            }
+
+            if (!found_edge) {
+                path.push_back(u);
+                stack.pop_back();
+            }
+        }
+
+        // 3. Check if all edges were visited (Graph must be connected)
+        if (path.size() != edges_count + 1) return {};
+
+        reverse(path.begin(), path.end());
+        return path;
+    }
+};
+
+struct EulerDirected {
+    int n;
+    int edges_count;
+    vector<vector<int>> adj;
+    vector<int> in_deg, out_deg;
+
+    void init(int _n) {
+        n = _n;
+        edges_count = 0;
+        adj.assign(n, vector<int>());
+        in_deg.assign(n, 0);
+        out_deg.assign(n, 0);
+    }
+
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+        out_deg[u]++;
+        in_deg[v]++;
+        edges_count++;
+    }
+
+    // Returns the sequence of vertices in the path/circuit.
+    // Returns an empty vector if no Eulerian Path/Circuit exists.
+    vector<int> solve() {
+        if (edges_count == 0) return {};
+
+        int start_node = -1, end_node = -1;
+        int start_count = 0, end_count = 0;
+
+        // 1. Check conditions and find the start node
+        for (int i = 0; i < n; i++) {
+            if (out_deg[i] - in_deg[i] == 1) {
+                start_node = i;
+                start_count++;
+            } else if (in_deg[i] - out_deg[i] == 1) {
+                end_node = i;
+                end_count++;
+            } else if (in_deg[i] != out_deg[i]) {
+                return {}; // Invalid degrees for Euler Path/Circuit
+            }
+        }
+
+        if (start_count > 1 || end_count > 1) return {};
+
+        // If it's a circuit, start at any node with an outgoing edge
+        if (start_node == -1) {
+            for (int i = 0; i < n; i++) {
+                if (out_deg[i] > 0) {
+                    start_node = i;
+                    break;
+                }
+            }
+        }
+
+        // 2. Hierholzer's Algorithm
+        vector<int> path;
+        vector<int> stack;
+        stack.push_back(start_node);
+
+        while (!stack.empty()) {
+            int u = stack.back();
+            if (out_deg[u] > 0) {
+                // Get the next edge and remove it
+                int v = adj[u].back();
+                adj[u].pop_back();
+                out_deg[u]--;
+                stack.push_back(v);
+            } else {
+                // No more outgoing edges, add to path and backtrack
+                path.push_back(u);
+                stack.pop_back();
+            }
+        }
+
+        // 3. Check if all edges were visited (Graph must be connected)
+        if (path.size() != edges_count + 1) return {};
+
+        reverse(path.begin(), path.end());
+        return path;
+    }
+};
+signed main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+}
