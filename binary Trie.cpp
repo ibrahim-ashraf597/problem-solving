@@ -52,5 +52,20 @@ struct BinaryTrie {
         // if(cur->)
         return val;
     }
+     int MNXor(int n) {
+        node *cur = root;
+        int val = 0;
+        for (int i = 31; i >= 0; i--) {
+            bool idx = (n >> i) & 1;
+            if (cur->ch[idx] != 0) {
+                // cout<<i<<el;
+                cur = cur->ch[ idx];
+            } else {
+                cur = cur->ch[1^idx];
+                val+=(1LL<<i);
+            }
+        }
+        // if(cur->)
+        return val;
+    }
 };
-
